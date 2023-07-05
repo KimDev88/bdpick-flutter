@@ -1,3 +1,4 @@
+import 'package:bd_pick/component/background_container.dart';
 import 'package:bd_pick/component/common/navigation_service.dart';
 import 'package:bd_pick/component/custom_input.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,8 @@ import '../const/message.dart';
 
 class CustomAppBar {
   static final BuildContext _context =
-      NavigationService.navigatorKey.currentContext!;
-  static final GlobalKey<ScaffoldState> scaffoldKey =
-      GlobalKey<ScaffoldState>();
-
+      NavigationService.navigatorKey.currentState!.context;
+  static late BuildContext drawerContext;
   static double leadingItemWidth = 35.0;
 
   static double getLeadingWidth() {
@@ -21,8 +20,12 @@ class CustomAppBar {
         (isSignIn ? leadingItemWidth : 0);
   }
 
+  static void setContext(BuildContext context) {
+    drawerContext = context;
+  }
+
   static void openDrawer() {
-    scaffoldKey.currentState!.openDrawer();
+    Scaffold.of(drawerContext).openDrawer();
   }
 
   static Widget getLeadingWidget() {

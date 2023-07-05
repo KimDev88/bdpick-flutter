@@ -73,64 +73,66 @@ class BackGroundContainer extends StatelessWidget {
     ];
 
     return Scaffold(
-      // input focus 시 레이아웃 변경 방지
-      // resizeToAvoidBottomInset: false,
-      // key: CustomAppBar.scaffoldKey.currentState == null ? CustomAppBar.scaffoldKey: null,
-      key: CustomAppBar.scaffoldKey,
-      restorationId: restorationId,
-      appBar: renderAppBar,
-      drawer: Prefs.getUserId() != null
-          ? NavigationDrawer(
-              // onDestinationSelected: handleScreenChanged,
-              // selectedIndex: screenIndex,
-              children: <Widget>[
-                Padding(
-                    padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            Prefs.getUserId()!,
-                            style: Theme.of(context).textTheme.titleSmall,
+        // input focus 시 레이아웃 변경 방지
+        // resizeToAvoidBottomInset: false,
+        restorationId: restorationId,
+        appBar: renderAppBar,
+        drawer: Prefs.getUserId() != null
+            ? NavigationDrawer(
+                // onDestinationSelected: handleScreenChanged,
+                // selectedIndex: screenIndex,
+                children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              Prefs.getUserId()!,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
                           ),
-                        ),
-                        CustomButton.renderCustomButton(
-                            '로그아웃', const Size(15, 30),
-                            onButtonPressedFunc: () {
-                          Prefs.clear();
-                          TokenService.clear();
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, RouteKeys.main, (route) => false);
-                        }),
-                      ],
-                    )),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(28, 16, 28, 10),
-                  child: Divider(),
+                          CustomButton.renderCustomButton(
+                              '로그아웃', const Size(15, 30),
+                              onButtonPressedFunc: () {
+                            Prefs.clear();
+                            TokenService.clear();
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, RouteKeys.main, (route) => false);
+                          }),
+                        ],
+                      )),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(28, 16, 28, 10),
+                    child: Divider(),
+                  ),
+                  // ...destinations.map(
+                  //   (ExampleDestination destination) {
+                  //     return NavigationDrawerDestination(
+                  //       label: Text(destination.label),
+                  //       icon: destination.icon,
+                  //       selectedIcon: destination.selectedIcon,
+                  //     );
+                  //   },
+                  // ),
+                ],
+              )
+            : null,
+        body: Builder(
+          builder: (context) {
+            CustomAppBar.setContext(context);
+            return SingleChildScrollView(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: isUseHeight ? minHeight : null,
+                constraints: BoxConstraints(
+                  minHeight: minHeight,
                 ),
-                // ...destinations.map(
-                //   (ExampleDestination destination) {
-                //     return NavigationDrawerDestination(
-                //       label: Text(destination.label),
-                //       icon: destination.icon,
-                //       selectedIcon: destination.selectedIcon,
-                //     );
-                //   },
-                // ),
-              ],
-            )
-          : null,
-      body: SingleChildScrollView(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: isUseHeight ? minHeight : null,
-          constraints: BoxConstraints(
-            minHeight: minHeight,
-          ),
-          decoration: decoration,
-          child: child,
-        ),
-      ),
-    );
+                decoration: decoration,
+                child: child,
+              ),
+            );
+          },
+        ));
   }
 }

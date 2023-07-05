@@ -62,6 +62,11 @@ class _SignInState extends State<SignIn> {
   };
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     late Function()? onSignInButtonPressedFunc =
         (user.id != '' && user.password != '')
