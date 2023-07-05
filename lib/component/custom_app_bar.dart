@@ -8,10 +8,50 @@ import '../const/message.dart';
 class CustomAppBar {
   static final BuildContext _context =
       NavigationService.navigatorKey.currentContext!;
-  static final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey<ScaffoldState>();
+
+  static double leadingItemWidth = 35.0;
+
+  static double getLeadingWidth() {
+    bool isCanPop = Navigator.canPop(_context);
+    bool isSignIn = Prefs.getUserId() != null;
+
+    return (isCanPop ? leadingItemWidth : 0) +
+        (isSignIn ? leadingItemWidth : 0);
+  }
 
   static void openDrawer() {
     scaffoldKey.currentState!.openDrawer();
+  }
+
+  static Widget getLeadingWidget() {
+    return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+      Navigator.canPop(_context)
+          ? SizedBox(
+              width: leadingItemWidth,
+              child: IconButton(
+                padding: EdgeInsets.all(0.0),
+                // style: ButtonStyle(padding: MaterialStatePropertyAll(EdgeInsets.zero), fixedSize: MaterialStatePropertyAll(Size(10,10))),
+                onPressed: () {
+                  Navigator.pop(_context);
+                },
+                icon: const Icon(Icons.arrow_back_sharp),
+              ),
+            )
+          : const SizedBox.shrink(),
+      Prefs.getUserId() != null
+          ? Container(
+              margin: EdgeInsetsDirectional.all(0),
+              width: leadingItemWidth,
+              child: IconButton(
+                  // padding: EdgeInsetsDirectional.all(0.0),
+                  onPressed: () {
+                    openDrawer();
+                  },
+                  icon: const Icon(Icons.menu)))
+          : const SizedBox.shrink(),
+    ]);
   }
 
   /// Custom AppBar를 그린다.
@@ -23,15 +63,18 @@ class CustomAppBar {
     bool canPop = Navigator.canPop(_context);
     if (isUseAppBar) {
       return AppBar(
+        primary: true,
         iconTheme: const IconThemeData(color: Colors.white),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
+        // centerTitle: true,
+        // automaticallyImplyLeading: false,
         backgroundColor: BdColors.buttonColor,
         shadowColor: Colors.white,
-        titleSpacing: 5,
+        // titleSpacing: 5,
+        leadingWidth: getLeadingWidth(),
+        leading: getLeadingWidget(),
         title: Row(
-          mainAxisAlignment:
-              canPop ? MainAxisAlignment.start : MainAxisAlignment.center,
+          // mainAxisAlignment:
+          // canPop ? MainAxisAlignment.start : MainAxisAlignment.center,
           children: [
             Text(
               titleText ?? CustomMessage.intro,
@@ -47,7 +90,7 @@ class CustomAppBar {
     return null;
   }
 
-  static PreferredSizeWidget? renderSigninAppBar(
+  static PreferredSizeWidget? renderSearchAppBar(
     bool isUseAppBar, {
     PreferredSizeWidget? bottom,
   }) {
@@ -58,8 +101,9 @@ class CustomAppBar {
         // automaticallyImplyLeading: true,
         backgroundColor: BdColors.buttonColor,
         shadowColor: Colors.white,
-        // leadingWidth: 50,
+        leadingWidth: getLeadingWidth(),
         titleSpacing: 5,
+        leading: getLeadingWidget(),
         title: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,

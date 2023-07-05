@@ -40,8 +40,9 @@ class RouteKeys {
 class ApiUrls {
   static const String apiUrlLocal = 'http://192.168.0.4:8080';
   static const String apiUrlDev = 'http://152.69.231.150:8080';
-  // static const String apiUrl = apiUrlLocal;
-  static const String apiUrl = apiUrlDev;
+  static const String apiUrl = apiUrlLocal;
+
+  // static const String apiUrl = apiUrlDev;
 
   static const String _prefixApiUrl = '/api';
 
@@ -52,6 +53,7 @@ class ApiUrls {
   static const String signCheckId = '$_prefixApiUrl/sign/check';
   static const String signSendmail = '$_prefixApiUrl/sign/send-mail';
   static const String signVerifyEmail = '$_prefixApiUrl/sign/verify-mail';
+  static const String signRenew = '$_prefixApiUrl/sign/renew';
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /// shop

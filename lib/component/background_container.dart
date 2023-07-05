@@ -32,8 +32,8 @@ class BackGroundContainer extends StatelessWidget {
     this.bottom,
     this.titleText,
     this.decoration,
-    this.isUseHeight = false, this.restorationId,
-
+    this.isUseHeight = false,
+    this.restorationId,
   });
 
   @override
@@ -47,7 +47,7 @@ class BackGroundContainer extends StatelessWidget {
         break;
       case AppBarType.isSigned:
         renderAppBar =
-            CustomAppBar.renderSigninAppBar(isUseAppBar, bottom: bottom);
+            CustomAppBar.renderSearchAppBar(isUseAppBar, bottom: bottom);
         break;
     }
 
@@ -75,6 +75,8 @@ class BackGroundContainer extends StatelessWidget {
     return Scaffold(
       // input focus 시 레이아웃 변경 방지
       // resizeToAvoidBottomInset: false,
+      // key: CustomAppBar.scaffoldKey.currentState == null ? CustomAppBar.scaffoldKey: null,
+      key: CustomAppBar.scaffoldKey,
       restorationId: restorationId,
       appBar: renderAppBar,
       drawer: Prefs.getUserId() != null
@@ -92,7 +94,8 @@ class BackGroundContainer extends StatelessWidget {
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ),
-                        CustomButton.renderCustomButton('로그아웃', const Size(15, 30),
+                        CustomButton.renderCustomButton(
+                            '로그아웃', const Size(15, 30),
                             onButtonPressedFunc: () {
                           Prefs.clear();
                           TokenService.clear();

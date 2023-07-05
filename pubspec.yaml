@@ -48,6 +48,7 @@ dependencies:
   date_format: ^2.0.7
 #  localization: ^2.1.0
   http_parser: ^4.0.2
+  platform_device_id: ^1.0.1
 
 dev_dependencies:
   flutter_test:

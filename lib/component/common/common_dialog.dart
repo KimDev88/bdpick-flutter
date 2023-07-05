@@ -30,7 +30,10 @@ class CommonDialog {
   }
 
   static void show(
-      {String? titleText, String? contextText, String closeText = '닫기'}) {
+      {String? titleText,
+      String? contextText,
+      String closeText = '닫기',
+      dynamic Function()? onButtonPressedFunc}) {
     showDialog(
       context: NavigationService.navigatorKey.currentContext!,
       barrierDismissible: false,
@@ -52,10 +55,11 @@ class CommonDialog {
             Center(
               child: CustomButton.renderCustomButton(
                 closeText,
-                Size(50, 30),
-                onButtonPressedFunc: () {
-                  Navigator.pop(context);
-                },
+                const Size(50, 30),
+                onButtonPressedFunc: onButtonPressedFunc ??
+                    () {
+                      Navigator.pop(context);
+                    },
               ),
             ),
           ],

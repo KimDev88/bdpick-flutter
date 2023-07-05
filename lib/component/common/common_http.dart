@@ -1,13 +1,16 @@
-import 'dart:io';
-
+import 'package:bd_pick/component/common/navigation_service.dart';
 import 'package:bd_pick/component/common/token_service.dart';
 import 'package:bd_pick/const/const.dart';
+import 'package:bd_pick/model/token.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 import '../../const/enum.dart';
 import 'common_dialog.dart';
 
 class CommonHttp {
+  static final BuildContext _context =
+      NavigationService.navigatorKey.currentContext!;
   static final _options = BaseOptions(
     baseUrl: ApiUrls.apiUrl,
     connectTimeout: const Duration(seconds: 5),
@@ -15,6 +18,34 @@ class CommonHttp {
     receiveTimeout: const Duration(seconds: 30),
   );
   static final dio = Dio(_options);
+
+  static Future<void> _renewRequest(HttpMethod method, String path,
+      {Object? data, Function(dynamic)? successFunction}) async {
+    Token token = Token();
+    token.accessToken = await TokenService.getAccessToken();
+    token.refreshToken = await TokenService.getRefreshToken();
+
+    CommonHttp.request(
+      HttpMethod.post,
+      ApiUrls.signRenew,
+      data: token.toJson(),
+      successFunction: (resData) {
+        if (resData != null) {
+          Map<String, dynamic> resultToken = resData[KeyNamesToken.token.name];
+          // save tokens
+          Token token = Token.fromJson(resultToken);
+          TokenService.saveToken(token);
+          return request(method, path,
+              data: data, successFunction: successFunction);
+
+          // save userType
+          // String userTypeStr = data[KeyNamesUser.userType.name];
+          // Prefs.setUserType(userTypeStr);
+          // Prefs.setUserId(requestData[KeyNamesUser.id.name]);
+        }
+      },
+    );
+  }
 
   static void request(HttpMethod method, String path,
       {Object? data, Function(dynamic)? successFunction}) async {
@@ -52,22 +83,43 @@ class CommonHttp {
                 contentType: Headers.jsonContentType, headers: headerMap),
             // contentType: Headers.multipartFormDataContentType, headers: headerMap),
             onSendProgress: (int sent, int total) {
-              print('$sent $total');
+              // print('$sent $total');
             },
           );
           break;
       }
       final resData = response.data;
-      print(data.toString());
 
-      print(data);
+      print('request data : $data');
+
+      String resCode = resData['code'];
+      String resMessage = resData['message'];
+      print('response code : $resCode');
+      print('response message : $resMessage');
+
       /// 성공일시
-      if (resData['code'] == "0000") {
+      if (resCode == "0000") {
         if (successFunction != null && response.data['data'] != null) {
           await successFunction(response.data['data']);
         }
-      } else if (resData['message'] != null) {
-        // CommonDialog.show(titleText: '에러', contextText: resData['message']);
+      }
+
+      /// 액세스 토큰 만료 시 갱신
+      else if (resCode == "0410") {
+        return _renewRequest(method, path,
+            data: data, successFunction: successFunction);
+      }
+
+      /// 리프레시 토큰 만료 시 로그인 화면으로 이동
+      else if (resCode == "0401") {
+        CommonDialog.show(
+          titleText: '인증정보가 만료되어 재로그인이 필요합니다.',
+          onButtonPressedFunc: () {
+            Navigator.of(_context)
+                .pushNamedAndRemoveUntil(RouteKeys.signIn, (route) => false);
+          },
+        );
+      } else {
         CommonDialog.show(titleText: resData['message']);
       }
     } on DioException catch (e) {

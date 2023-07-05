@@ -1,8 +1,8 @@
 import 'package:bd_pick/component/background_container.dart';
-import 'package:bd_pick/component/common/navigation_service.dart';
 import 'package:bd_pick/component/common/token_service.dart';
 import 'package:bd_pick/component/custom_input.dart';
 import 'package:flutter/material.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 
 import '../../component/common/common_http.dart';
 import '../../component/common/sign_service.dart';
@@ -21,7 +21,9 @@ class SignIn extends StatefulWidget {
     return _SignInState();
   }
 
-  static void request(dynamic requestData) {
+  static Future<void> request(dynamic requestData) async {
+    String? deviceId = await PlatformDeviceId.getDeviceId;
+    requestData[KeyNamesUser.uuid.name] = deviceId;
     CommonHttp.request(
       HttpMethod.post,
       ApiUrls.signIn,

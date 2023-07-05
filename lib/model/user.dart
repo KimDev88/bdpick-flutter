@@ -20,5 +20,6 @@ class User {
 enum KeyNamesUser {
   id,
   userId,
-  userType
+  userType,
+  uuid
 }
