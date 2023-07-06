@@ -1,4 +1,5 @@
 import 'package:bd_pick/screen/intro.dart';
+import 'package:bd_pick/screen/shop/create_ad.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,7 +12,7 @@ void main() {
   runApp(
     MaterialApp(
       home: const Intro(),
-      // home: AdMain(),
+      // home: CreateAd(),
       navigatorKey: NavigationService.navigatorKey,
       routes: Routes.getRoutes(),
       builder: EasyLoading.init(),

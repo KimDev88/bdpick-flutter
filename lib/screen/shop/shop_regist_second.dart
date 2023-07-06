@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bd_pick/component/background_container.dart';
@@ -115,7 +116,7 @@ class ShopRegistSecondState extends State<ShopRegistSecond> {
                     Prefs.prefs!.getString(KeyNamesShop.registNumber.name)!;
                 shop.tel = Prefs.prefs!.getString(KeyNamesShop.tel.name)!;
 
-                Map<String, dynamic> data = shop.toJson();
+                Map<String, dynamic> data = {};
                 data.addAll({
                   'files': [
                     await MultipartFile.fromFile(image1.path,
@@ -128,6 +129,8 @@ class ShopRegistSecondState extends State<ShopRegistSecond> {
                         contentType: MediaType('image', 'jpg')),
                   ],
                   'fileTypes': ['S1', 'S2', 'S3', 'S4'],
+                  'shop': MultipartFile.fromString(jsonEncode(shop.toJson()),
+                      contentType: MediaType.parse('application/json')),
                 });
 
                 FormData formData = FormData.fromMap(data);
