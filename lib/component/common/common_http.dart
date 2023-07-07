@@ -135,9 +135,10 @@ class CommonHttp {
         // print(response.data);
         // print(response.headers);
         // print(response.requestOptions);
-        print(response.statusCode);
-        print(response.statusMessage);
-        print(e.message);
+        print('statusCode : ${response.statusCode}');
+        print('statusMessage : ${response.statusMessage}');
+        print('message : ${e.message}');
+        print('responseData : ${e.response?.data}');
       }
 
       /// 서버 응답을 받지 못했을 경우
