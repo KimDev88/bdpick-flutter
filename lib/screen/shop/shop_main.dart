@@ -70,7 +70,8 @@ class _ShopMainState extends State<ShopMain> {
                   height: height,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, RouteKeys.shopMain);
+                      Navigator.pushNamed(context, RouteKeys.createAd);
+                      // Navigator.pushNamed(context, RouteKeys.shopMain);
                     },
                     child: Text("내가게 홍보하기", style: textStyle),
                   ),
@@ -86,7 +87,7 @@ class _ShopMainState extends State<ShopMain> {
                   height: height,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, RouteKeys.createAd);
+                      // Navigator.pushNamed(context, RouteKeys.createAd);
                     },
                     child: Text("내가게 관리하기", style: textStyle),
                   ),

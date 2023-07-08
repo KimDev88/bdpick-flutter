@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bd_pick/component/common/sign_service.dart';
 import 'package:bd_pick/const/const.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,8 @@ class Intro extends StatefulWidget {
 }
 
 class IntroState extends State<Intro> {
+
+
   @override
   Widget build(BuildContext context) {
     Prefs.initializePrefs();
@@ -46,8 +49,14 @@ class IntroState extends State<Intro> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, RouteKeys.main);
+
+    Timer(const Duration(seconds: 2), () {
+      // 로그인 정보가 존재할 경우
+      if(Prefs.getUserId() != null){
+        SignService.navigateToMainsByPrefs();
+      } else {
+        Navigator.pushReplacementNamed(context, RouteKeys.main);
+      }
     });
   }
 }

@@ -10,9 +10,11 @@ class ShopAd {
   late DateTime startedAt;
   late DateTime endedAt;
   late String content;
-  late List<String> keywordList = List.empty();
   String? createdAt;
   String? updatedAt;
+  late List<String> keywordList = List.empty();
+  String? keywords;
+  String? fileUri;
 
   ShopAd();
 

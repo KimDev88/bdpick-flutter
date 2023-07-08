@@ -14,7 +14,6 @@ class CommonHttp {
   static final _options = BaseOptions(
     baseUrl: ApiUrls.apiUrl,
     connectTimeout: const Duration(seconds: 5),
-    // receiveTimeout: const Duration(seconds: 3),
     receiveTimeout: const Duration(seconds: 30),
   );
   static final dio = Dio(_options);

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bd_pick/component/background_container.dart';
+import 'package:bd_pick/component/common/common_dialog.dart';
 import 'package:bd_pick/component/common/common_http.dart';
 import 'package:bd_pick/component/custom_button.dart';
 import 'package:bd_pick/component/custom_input.dart';
@@ -33,6 +34,7 @@ class _CreateAdState extends State<CreateAd> with RestorationMixin {
   static DateTime? endDate;
   final ShopAd _shopAd = ShopAd();
   Map<String, dynamic> inputMap = {};
+  List<ShopAd> adList = [];
 
   // String? shopName = Prefs.prefs!.getString(KeyNamesShop.name.name);
   String? shopName = 'test';
@@ -73,6 +75,7 @@ class _CreateAdState extends State<CreateAd> with RestorationMixin {
   @override
   void initState() {
     super.initState();
+    // text controller binding
     branchController.addListener(
         inputListener(KeyNamesShopAd.branchName, branchController));
     startedAtController.addListener(
@@ -83,6 +86,26 @@ class _CreateAdState extends State<CreateAd> with RestorationMixin {
         .addListener(inputListener(KeyNamesShopAd.content, contentController));
     keywordController
         .addListener(inputListener(KeyNamesShopAd.keyword, keywordController));
+
+    // date 초기화
+    startDate = DateTime.now().add(const Duration(hours: 1));
+    endDate = null;
+
+    // 데이터 조회
+    CommonHttp.request(
+      HttpMethod.get,
+      ApiUrls.shopAds,
+      data: null,
+      successFunction: (data) {
+        // List adList = data as List;
+        data.forEach((element) {
+          adList.add(ShopAd.fromJson(element));
+        });
+        setState(() {});
+
+        // List<ShopAd> shopAd = ShopAd.fromJson(data);
+      },
+    );
   }
 
   @override
@@ -98,10 +121,11 @@ class _CreateAdState extends State<CreateAd> with RestorationMixin {
   @override
   Widget build(BuildContext context) {
     return BackGroundContainer(
+        isUseHeight: true,
         titleText: '내가게 홍보하기',
         isUseAppBar: true,
         child: Column(
-          mainAxisSize: MainAxisSize.max,
+          // mainAxisSize: MainAxisSize.max,
           children: [
             Row(
               children: [
@@ -158,8 +182,12 @@ class _CreateAdState extends State<CreateAd> with RestorationMixin {
                       _shopAd.keywordList = keywordList;
 
                       Map<String, dynamic> data = {};
-                      XFile image =
-                          imagePickWidget.images.getImage(_ImageKeys.A1.name)!;
+                      XFile? image =
+                          imagePickWidget.images.getImage(_ImageKeys.A1.name);
+                      if (image == null) {
+                        CommonDialog.show(titleText: '이미지를 선택해주세요');
+                        return;
+                      }
 
                       data.addAll({
                         'shop': MultipartFile.fromString(
@@ -177,16 +205,83 @@ class _CreateAdState extends State<CreateAd> with RestorationMixin {
                         ApiUrls.shopAds,
                         data: formData,
                         successFunction: (data) {
-                          print(data);
+                          if (data != null) {
+                            CommonDialog.show(
+                                titleText: '등록 되었습니다.',
+                                onButtonPressedFunc: () {
+                                  // initState();
+                                  Navigator.popAndPushNamed(
+                                      context, RouteKeys.createAd);
+                                  // Navigator.pushReplacementNamed(
+                                  //     context, RouteKeys.createAd);
+                                });
+                          }
                         },
                       );
-
                       print(_shopAd);
                     },
                   ),
                 ),
               ],
-            )
+            ),
+            (adList.length > 0)
+                ? Expanded(
+                    child: GridView.builder(
+                      // itemCount: widget.selectedList.length,
+                      itemCount: adList.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 0.7, crossAxisCount: 2),
+                      itemBuilder: (_, int index) {
+                        ShopAd ad = adList[index];
+                        return InkWell(
+                          // onTap: () => _toggle(index),
+                          // onLongPress: () {
+                          //   if (!widget.isSelectionMode) {
+                          //     setState(() {
+                          //       widget.selectedList[index] = true;
+                          //     });
+                          //     widget.onSelectionChange!(true);
+                          //   }
+                          // },
+                          child: GridTile(
+
+                              //   child: Container(
+                              // // child: widget.isSelectionMode
+                              // //     ? Checkbox(
+                              // //         onChanged: (bool? x) => _toggle(index),
+                              // //         value: widget.selectedList[index])
+                              // //     : const Icon(Icons.image),
+                              child: Card(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Image.network(ad.fileUri!, fit: BoxFit.fill),
+                                Text(ad.branchName),
+                                Text('${formatDate(ad.startedAt, [
+                                      yyyy,
+                                      '-',
+                                      mm,
+                                      '-',
+                                      dd
+                                    ])} ~ ${formatDate(ad.endedAt, [
+                                      yyyy,
+                                      '-',
+                                      mm,
+                                      '-',
+                                      dd
+                                    ])}'),
+                                Text(ad.content),
+                                Text(ad.keywords!),
+                              ],
+                            ),
+                          )),
+                        );
+                        // );
+                      },
+                    ),
+                  )
+                : SizedBox.shrink(),
           ],
         ));
   }
@@ -259,6 +354,7 @@ class _CreateAdState extends State<CreateAd> with RestorationMixin {
               Expanded(
                 child: InkWell(
                   child: CustomInput.renderInputField(
+                    readOnly: true,
                     controller: startedAtController,
                     hintText: '시작일',
                     hintStyle: TextStyles.hintLabelSmall,
@@ -283,6 +379,7 @@ class _CreateAdState extends State<CreateAd> with RestorationMixin {
                   )),
               Expanded(
                 child: CustomInput.renderInputField(
+                  readOnly: true,
                   controller: endedAtController,
                   hintText: '종료일',
                   hintStyle: TextStyles.hintLabelSmall,
