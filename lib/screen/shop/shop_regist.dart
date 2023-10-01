@@ -43,7 +43,7 @@ class ShopRegistState extends State<ShopRegist> {
       shop.addressName = prefs.getString(KeyNamesShop.addressName.name)!;
       shop.name = prefs.getString(KeyNamesShop.name.name)!;
       shop.ownerName = prefs.getString(KeyNamesShop.ownerName.name)!;
-      shop.registNumber = prefs.getString(KeyNamesShop.registNumber.name)!;
+      shop.registerNumber = prefs.getString(KeyNamesShop.registerNumber.name)!;
       shop.type = prefs.getString(KeyNamesShop.type.name)!;
       shop.tel = prefs.getString(KeyNamesShop.tel.name)!;
     }
@@ -58,7 +58,7 @@ class ShopRegistState extends State<ShopRegist> {
   Widget build(BuildContext context) {
     /// 다음 버튼 pressed
     late Function()? onNextButtonPressedFunc = (isVerifyRegister &&
-            shop.registNumber != '' &&
+            shop.registerNumber != '' &&
             shop.name != '' &&
             shop.ownerName != '' &&
             shop.type != '' &&
@@ -70,11 +70,11 @@ class ShopRegistState extends State<ShopRegist> {
 
     /// 사업자 버튼 확인 pressed
     late Function()? onVerifyButtonPressedFunc =
-        (shop.registNumber != '' && isVerifyRegister == false)
+        (shop.registerNumber != '' && isVerifyRegister == false)
             ? () => CommonHttp.request(
                   HttpMethod.post,
                   ApiUrls.shopCheckRegister,
-                  data: {KeyNamesShop.registNumber.name: shop.registNumber},
+                  data: {KeyNamesShop.registerNumber.name: shop.registerNumber},
                   successFunction: (isVerify) {
                     if (isVerify) {
                       setState(() {
@@ -101,7 +101,7 @@ class ShopRegistState extends State<ShopRegist> {
           onButtonPressedFunc: onVerifyButtonPressedFunc,
           controller: isFirst
               ? TextEditingController(
-                  text: shop.registNumber,
+                  text: shop.registerNumber,
                 )
               : null,
         ),
@@ -189,8 +189,8 @@ class ShopRegistState extends State<ShopRegist> {
   late Function(String) onRegisterNumberChangedFunc = (value) {
     setState(() {
       isVerifyRegister = false;
-      shop.registNumber = value;
-      prefs.setString(KeyNamesShop.registNumber.name, value);
+      shop.registerNumber = value;
+      prefs.setString(KeyNamesShop.registerNumber.name, value);
     });
   };
 

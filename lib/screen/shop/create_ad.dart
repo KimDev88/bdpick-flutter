@@ -91,7 +91,7 @@ class _CreateAdState extends State<CreateAd> with RestorationMixin {
     startDate = DateTime.now().add(const Duration(hours: 1));
     endDate = null;
 
-    // 데이터 조회
+    // 내 매장 광고 데이터 조회
     CommonHttp.request(
       HttpMethod.get,
       ApiUrls.shopAds,
@@ -190,11 +190,12 @@ class _CreateAdState extends State<CreateAd> with RestorationMixin {
                       }
 
                       data.addAll({
-                        'shop': MultipartFile.fromString(
+                        'shopAd': MultipartFile.fromString(
                             jsonEncode(_shopAd.toJson()),
                             contentType: MediaType.parse('application/json')),
                         'files': [
-                          await MultipartFile.fromFile(image.path),
+                          await MultipartFile.fromFile(image.path,
+                              contentType: MediaType('image', 'jpg')),
                         ],
                         'fileTypes': [_ImageKeys.A1.name],
                       });

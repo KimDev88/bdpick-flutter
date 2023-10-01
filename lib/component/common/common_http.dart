@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import '../../const/enum.dart';
 import 'common_dialog.dart';
 
+/// 공통 http 호출 라이브러리
 class CommonHttp {
   static final BuildContext _context =
       NavigationService.navigatorKey.currentContext!;
+
   static final _options = BaseOptions(
     baseUrl: ApiUrls.apiUrl,
     connectTimeout: const Duration(seconds: 5),
@@ -49,14 +51,14 @@ class CommonHttp {
   static void request(HttpMethod method, String path,
       {Object? data, Function(dynamic)? successFunction}) async {
     try {
-      // dio.interceptors.add(LogInterceptor(
-      // request: true,
-      // requestBody: true,
-      // responseBody: true,
-      // requestHeader: true,
-      // responseHeader: true,
-      // error: true
-      // ));
+      dio.interceptors.add(LogInterceptor(
+      request: true,
+      requestBody: true,
+      responseBody: true,
+      requestHeader: true,
+      responseHeader: true,
+      error: true
+      ));
       CommonDialog.showProgress();
 
       // JWT token 설정

@@ -38,7 +38,7 @@ class RouteKeys {
 }
 
 class ApiUrls {
-  static const String apiUrlLocal = 'http://192.168.0.4:8080';
+  static const String apiUrlLocal = 'http://localhost:8080';
   static const String apiUrlDev = 'http://152.69.231.150:8080';
   static const String apiUrl = apiUrlLocal;
 
@@ -100,7 +100,7 @@ class Prefs {
       prefs!.remove(KeyNamesShop.addressName.name);
       prefs!.remove(KeyNamesShop.name.name);
       prefs!.remove(KeyNamesShop.ownerName.name);
-      prefs!.remove(KeyNamesShop.registNumber.name);
+      prefs!.remove(KeyNamesShop.registerNumber.name);
       prefs!.remove(KeyNamesShop.type.name);
       prefs!.remove(KeyNamesShop.tel.name);
     }
@@ -112,7 +112,7 @@ class Prefs {
     prefs!.setString(
         KeyNamesShop.ownerName.name, data[KeyNamesShop.ownerName.name]);
     prefs!.setString(
-        KeyNamesShop.registNumber.name, data[KeyNamesShop.registNumber.name]);
+        KeyNamesShop.registerNumber.name, data[KeyNamesShop.registerNumber.name]);
     prefs!.setString(KeyNamesShop.type.name, data[KeyNamesShop.type.name]);
     prefs!.setString(KeyNamesShop.tel.name, data[KeyNamesShop.tel.name]);
     prefs!.setString(

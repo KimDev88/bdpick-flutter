@@ -9,7 +9,7 @@ part of 'shop.dart';
 Shop _$ShopFromJson(Map<String, dynamic> json) => Shop()
   ..id = json['id'] as int?
   ..userId = json['userId'] as String?
-  ..registNumber = json['registNumber'] as String
+  ..registerNumber = json['registerNumber'] as String
   ..name = json['name'] as String
   ..ownerName = json['ownerName'] as String
   ..type = json['type'] as String
@@ -31,7 +31,7 @@ Map<String, dynamic> _$ShopToJson(Shop instance) {
 
   writeNotNull('id', instance.id);
   writeNotNull('userId', instance.userId);
-  val['registNumber'] = instance.registNumber;
+  val['registerNumber'] = instance.registerNumber;
   val['name'] = instance.name;
   val['ownerName'] = instance.ownerName;
   val['type'] = instance.type;

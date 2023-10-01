@@ -112,8 +112,8 @@ class ShopRegistSecondState extends State<ShopRegistSecond> {
                 shop.ownerName =
                     Prefs.prefs!.getString(KeyNamesShop.ownerName.name)!;
 
-                shop.registNumber =
-                    Prefs.prefs!.getString(KeyNamesShop.registNumber.name)!;
+                shop.registerNumber =
+                    Prefs.prefs!.getString(KeyNamesShop.registerNumber.name)!;
                 shop.tel = Prefs.prefs!.getString(KeyNamesShop.tel.name)!;
 
                 Map<String, dynamic> data = {};

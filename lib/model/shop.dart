@@ -6,7 +6,7 @@ part 'shop.g.dart';
 class Shop {
   int? id;
   String? userId;
-  String registNumber = '';
+  String registerNumber = '';
   String name = '';
   String ownerName = '';
   String type = '';
@@ -29,7 +29,7 @@ class Shop {
 enum KeyNamesShop {
   id,
   userId,
-  registNumber,
+  registerNumber,
   name,
   ownerName,
   type,
